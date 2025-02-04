@@ -1,0 +1,82 @@
+
+.app_layout {
+    height: 100vh;
+    width: 100vw;
+    margin-left: 0;
+    margin-right: 0;    
+    background-color: lightgray;
+    display : grid;  
+    grid-template-columns : 1fr 5fr 1fr;
+    overflow: hidden;
+}
+
+.app_left{
+    height: 100vh;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;    
+    background-color: lightgray;
+}
+
+.app_middle{
+    height: 100vh;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;    
+    background-color: lightgray;
+    overflow: hidden;
+}
+
+.app_right{
+    height: 100vh;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;    
+    background-color: lightgray;
+    overflow-x: scroll;
+}
+
+.app_middle_top{
+    height: 80vh;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;        
+    border: black 2px solid;
+}
+
+.app_middle_bottom{
+    height: 20vh;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;        
+    display : grid;  
+    grid-template-columns : 3fr 2fr;
+    
+}
+
+.app_middle_bottom_left{
+    height: 100%;
+    width: 100%;
+    background-color: lightgray; 
+    border: black 2px solid;   
+}
+
+.app_middle_bottom_right{
+    height: 100%;
+    width: 100%;    
+    border: black 2px solid;
+}
+
+
+/* set the background color of many elements across the grid */
+.ag-theme-alpine {
+    --ag-background-color: #ddd !important;
+    width: 100% !important;
+    height: 250vw !important;
+}
+
+/* change the font style of a single UI component */
+.ag-theme-alpine .ag-header-cell-label {
+    text-decoration : underline;
+    font-size: 1.2vw;
+}

@@ -1,0 +1,41 @@
+
+.variable_control{
+    background-color:lightgray;
+    display : grid;  
+    grid-template-columns : 2fr 1fr;    
+    width : 100%;                
+    height : 13vw;
+    border: black solid 2px;                    
+}
+
+.variable_control_title{
+    overflow : hidden; 
+    width : 100%;
+    height : 2vw;
+    grid-column : span 2;
+    font-size : 1.6vw;
+    text-decoration : underline !important;    
+}
+.variable_control_combobox{    
+    grid-column : span 2;
+    font-size : 1vw;
+    width : 100%;
+    height : 2vw;         
+}
+
+.variable_control_label{
+    
+    font-size : 1.5vw; 
+    width : 100%;
+    height : 100% 
+}
+
+.variable_control_input{    
+    overflow : hidden;    
+    font-size : 1vw;
+    width : 90%;
+    height : 80%;
+    appearance: textfield;
+}
+
+

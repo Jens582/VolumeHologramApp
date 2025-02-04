@@ -1,0 +1,19 @@
+.store_main{
+    width: 24vw;
+    height: 40vw;
+    overflow : scroll;
+    overflow-y: scroll;
+}
+
+.store_button{
+    width: 100%;
+    height: 3vw;
+    font-size: 1.5vw;
+}
+
+.store_text_area{
+    width: 100%;
+    height: 10vw;    
+    resize: none;
+    overflow: scroll;
+}

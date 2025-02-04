@@ -1,0 +1,41 @@
+.controller_progress{
+    width: 100%;
+    height: 100%;
+}
+
+.controller_btn_start{
+    width: 100%;
+    height: 100%;
+    font-size: 1.5vw;
+}
+
+.controller_label_order{
+    width: 100%;
+    height: 2.5vw;
+    font-size: 1.5vw;
+}
+.controller_input_order{
+    width: 100%;
+    height: 2.5vw;
+    font-size: 1.5vw;
+}
+
+.controller_transfer_name{
+    width: 100%;
+    height: 2.5vw;
+    font-size: 1.5vw;
+}
+.controller_transfer_btn{
+    width: 100%;
+    height: 2.5vw;
+    font-size: 1.5vw;
+}
+
+.controller_checkboxes{
+    width: 100%;
+    height: 2.5vw;
+    font-size: 1.5vw;
+    margin-right: 20%;
+}
+
+
