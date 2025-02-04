@@ -54,7 +54,8 @@ In the simulation, the hologram is divided into $n_z$ layers along the z-directi
   + The entire hologram is divided into $n_z$ layers.
 * **Cycle Mode:**
   + Only a single period in the z-direction is divided, where the period length is given by:  
-    $ l_z = 2\pi/K_z $
+    $l_z=2\pi/K_z$
+
 
 
 Since the *hologram is periodic*, this method *optimizes calculations* and significantly *increases efficiency* when using RCWA.
@@ -66,7 +67,7 @@ To use the app, first set the simulation parameters on the right side of the GUI
 ### Selecting a Variable Parameter
 At the top, you can define which *variable* should be analyzed for dependencies:
 
-![panel variable](panel_variable.png)
+![Variable section](variable_section.png)
 
 The parameter will be varied between **[start, end]** with equal step sizes.
 You can also select *\"cycles_thickness\"* for thickness-dependent simulations.
@@ -76,18 +77,20 @@ Note
 - All angles are in degrees. 
 - All lengths are normalized. 
 
+The normalization must be consistent across all parameters.
+
 ```
 
-The normalization must be consistent across all parameters.
+
 
 ### Simulation Parameter
 
 | Parameter | Description |
 | -------- | -------- |
-| theta | Polar angle of the incident ray |
-| phi	| Azimuthal angle of the incident ray |
-| lam |	Wavelength of the incident ray|
-| theta_rec1/2 | Polar angle of the recording beams 1 and 2. For transmission holograms use for both rays: $ -180° < \theta < 180° $. For reflection holograms use for one ray: $ 180° < \theta < 360° $ |
+| theta | Polar angle of the incident beam |
+| phi	| Azimuthal angle of the incident beam |
+| lam |	Wavelength of the incident beam|
+| theta_rec1/2 | Polar angle of the recording beams 1 and 2. For transmission holograms use for both beams: $-180°<\theta<180°$. For reflection holograms use for one beam: $180°<\theta<360°$ |
 | phi_rec1/2 |	Azimuthal angle of the recording beams 1 and 2 |
 | lam_hoe	| Wavelength of the recording beams |
 | n0 |	Average refractive index |
@@ -102,7 +105,7 @@ The normalization must be consistent across all parameters.
 
 The **control section** is located in the **lower middle part** of the GUI.  
 
-![Control Section](panel_control.png)  
+![Control Section](control_section.png)  
 
 This section allows you to **start and stop simulations**. A **progress indicator** displays the current progress of the simulation.  
 
