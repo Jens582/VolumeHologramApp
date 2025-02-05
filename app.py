@@ -9,4 +9,4 @@ if __name__ == "__main__":
     app.layout = layout_app
     app_controller = AppController()
     register_callbacks(app_controller)
-    app.run_server(debug=False)
+    app.run_server(debug=True)

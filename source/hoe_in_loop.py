@@ -47,7 +47,8 @@ class HoeInLoop:
         self.dimY = dimY
 
         text = self._get_parameter_text()
-        data = DataContainer.create_empty(dimX, dimY, dimZ, variable, text)
+        pram_variable = self.current_variable
+        data = DataContainer.create_empty(dimX, dimY, dimZ, variable, text, pram_variable)
         return data
     
 

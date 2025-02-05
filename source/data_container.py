@@ -21,6 +21,7 @@ class DataContainer:
         self.color: str = "black"
         self.name: str = "Simulation"
         self.parameter_text: str = ""
+        self.pram_variable: str = ""
 
     def to_dict(self) -> dict[str, any]:
         data = dict()
@@ -32,6 +33,7 @@ class DataContainer:
         data["color"] = self.color
         data["name"] = self.name
         data["parameter_text"] = self.parameter_text
+        data["pram_variable"] = self.pram_variable
         return data
     
     @staticmethod
@@ -45,6 +47,7 @@ class DataContainer:
         container.color = data["color"]
         container.name = data["name"]
         container.parameter_text = data["parameter_text"]
+        container.pram_variable = data["pram_variable"]
         return container
     
     def to_json(self) -> str:
@@ -95,6 +98,9 @@ class DataContainer:
                     plot["x"] = self.variable
                     plot["y"] = self.variable.copy()
                     plot["y"][:] = 50.0
+                    plot["pram_variable"] = self.pram_variable
+                    plot["line"] =  {"color": self.color, "dash":"solid"}                    
+                    plot["mode"] = "lines"
         return data_list
 
 
@@ -106,6 +112,7 @@ class DataContainer:
         plot["line"] =  {"color": self.color, "dash":"solid"}
         plot["name"] = name
         plot["mode"] = "lines"
+        plot["pram_variable"] = self.pram_variable
         return plot
     
     def _get_plot_dict_energy_p(self, name: str):
@@ -116,19 +123,21 @@ class DataContainer:
         plot["line"] =  {"color": self.color, "dash":"dot"}
         plot["name"] = name
         plot["mode"] = "lines"
+        plot["pram_variable"] = self.pram_variable
         return plot
 
     def _get_plot_dict(self, name: str,values: np.ndarray, hx: int, hy: int, dash: str):
         plot = dict()
         plot["x"] = self.variable.copy()
-        plot["y"] = self.get_hx_hy_order_of_values(values, hx, hy)
+        plot["y"] = self._get_hx_hy_order_of_values(values, hx, hy)
         plot["line"] =  {"color": self.color, "dash":dash}
         plot["name"] = name
         plot["mode"] = "lines"
+        plot["pram_variable"] = self.pram_variable
         return plot
 
     @staticmethod
-    def get_hx_hy_order_of_values(values: np.ndarray, hx: int, hy: int) -> np.ndarray:
+    def _get_hx_hy_order_of_values(values: np.ndarray, hx: int, hy: int) -> np.ndarray:
         shape = values.shape
         dimx = shape[1]
         dimy = shape[0]
@@ -145,13 +154,13 @@ class DataContainer:
         return values[iy, ix, :].copy()
 
     @staticmethod
-    def create_empty(dimX: int, dimY: int, dimZ: int, variable: np.ndarray, text: str) -> "DataContainer":
+    def create_empty(dimX: int, dimY: int, dimZ: int, variable: np.ndarray, text: str, pram_variable: str) -> "DataContainer":
         empty = DataContainer()
         empty.Rs_values = np.ones((dimY, dimX, dimZ))*np.nan
         empty.Rp_values = np.ones((dimY, dimX, dimZ))*np.nan
         empty.Ts_values = np.ones((dimY, dimX, dimZ))*np.nan
         empty.Tp_values = np.ones((dimY, dimX, dimZ))*np.nan
-
+        empty.pram_variable = pram_variable
         empty.variable = variable.copy()
         empty.parameter_text = text
         return empty

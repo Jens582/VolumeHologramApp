@@ -43,6 +43,7 @@ Once started, open your browser and go to [http://127.0.0.1:8050](http://127.0.0
 ### Virtual Environment Setup (Windows)
 You can create a virtual environment and install dependencies using the provided scripts:
 
+* Ensure that Python is installed and the system path is set.
 * Run create_venv.bat (or create_venv_version.bat for exact package versions).
 * Start the app with run_hologram_app.bat.
 * Open your browser and go to [http://127.0.0.1:8050](http://127.0.0.1:8050)
