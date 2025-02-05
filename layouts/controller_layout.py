@@ -47,7 +47,7 @@ _input_harmonic = dcc.Input(id=id_harmonic,className="controller_input_order",ty
 _transfer_button = html.Button(id=id_transfer, className="controller_transfer_btn", children = ["To Store"])
 _transfer_name = dcc.Input(id=id_name,className="controller_transfer_name",type='text', value="Name")
 
-_link_read_me = html.A(className="controller_link",children=["README/Github"],target="_blank", href="https://github.com/" )
+_link_read_me = html.A(className="controller_link",children=["README/Github"],target="_blank", href="https://github.com/Jens582/VolumeHologramApp" )
 
 layout_controller = html.Div(
                 className="app_middle_bottom_left",
