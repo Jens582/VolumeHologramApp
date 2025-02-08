@@ -3,8 +3,7 @@ from typing import Union
 
 from source.parameter_controller import ParameterControl
 from source.data_container import DataContainer
-from source.hoe_parameter_creator import hoe_parameters
-from source.hoe_logger import logger
+
 
 from rcwa.volume_hologram_3D import VolumeHologram3D
 from rcwa.hoe_thickness_dependence import HOEThicknessDependence
@@ -23,6 +22,7 @@ class HoeInLoop:
         self.current_variable: str = parameter_control.current_variable
         self.dimX: int = 0
         self.dimY: int = 0
+        self._hoe_parameters = parameter_control.hoe_parameters
         
         self._hoe: Union[VolumeHologram3D, HOEThicknessDependence] = None
         self._is_HOEThicknessDependence: bool = None
@@ -69,7 +69,7 @@ class HoeInLoop:
         return Rs, Rp, Ts, Tp
     
     def _get_Rs_Rp_Ts_Tp_VolumeHologram3D(self, value):
-        pram = hoe_parameters[self.current_variable]
+        pram = self._hoe_parameters[self.current_variable]
         name = pram.attribute_name
         setattr(self._hoe, name, value)
         Rs, Rp, Ts, Tp = self._hoe.calc_rcwa()
@@ -85,7 +85,7 @@ class HoeInLoop:
             self._is_HOEThicknessDependence = False
 
     def _fill_parameter_to_hoe(self):
-        for item in hoe_parameters.items():
+        for item in self._hoe_parameters.items():
               key = item[0]
               value = item[1].value
               name = item[1].attribute_name
@@ -98,7 +98,7 @@ class HoeInLoop:
     def _get_parameter_text(self):
         text = ""
         text = "Variable parameter: " + self.current_variable+"\n"
-        pram_current = hoe_parameters[self.current_variable]
+        pram_current = self._hoe_parameters[self.current_variable]
         start = pram_current.start
         end = pram_current.end
         steps = pram_current.steps
@@ -108,7 +108,7 @@ class HoeInLoop:
         label_steps = pram_current.label_steps
 
         text += f"{label_start}: {start}, {label_end}: {end}, {label_steps}: {steps}\n"
-        for item in hoe_parameters.items():
+        for item in self._hoe_parameters.items():
               key = item[0]
               value = item[1].value
               name = item[1].attribute_name

@@ -1,7 +1,7 @@
 import numpy as np
 import json
 from numbers import Number
-from source.hoe_logger import logger
+
 
 class DataContainer:
     """

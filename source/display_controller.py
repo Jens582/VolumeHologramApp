@@ -1,10 +1,29 @@
 import plotly.graph_objs as go
-from source.hoe_logger import logger
 
-def build_graph(figure_before: go.Figure, plot_data: list[dict]):
+
+def build_dummy_graph(text: str):
+    dummy_fig = go.Figure(
+                data=[ ],
+                layout=go.Layout(
+                    title="Volume Hologram",                    
+                    xaxis=dict(title='Variable', range=[-5, 105]),
+                    yaxis=dict(title='Diffraction efficiency [%]', range=[-5, 105]),
+                    margin=dict(l=40, r=40, t=40, b=40)
+                )
+            )
+    dummy_fig.add_annotation(
+                    text=text,
+                    x=50,  
+                    y=50,  
+                    showarrow=False, 
+                    font=dict(size=24)  
+    )
+    return dummy_fig
+
+
+def build_graph(figure_before: go.Figure, plot_data: list[dict], pram_variable):
     if plot_data is None:
-        return figure_before
-    pram_variable = _filter_and_get_pram_variable(plot_data)                
+        return figure_before     
     scatter_list = [go.Scatter(**pram) for pram in plot_data]
 
     rangeX = [0, 100]
@@ -23,20 +42,16 @@ def build_graph(figure_before: go.Figure, plot_data: list[dict]):
     )               
     return figure
 
-def _filter_and_get_pram_variable(plot_data: list[dict]) -> str:
+def filter_and_get_pram_variables(plot_data: list[dict]) -> list[str]:
     pram_variables = list()
+    if plot_data is None:
+        return pram_variables
     for pram in plot_data:        
         if pram.get("pram_variable"):
             pram_variables.append(pram["pram_variable"])
             del pram["pram_variable"]
+    return pram_variables
 
-    if len(pram_variables) == 0:
-        return "Variable"
-    pram_variable = pram_variables[0]
 
-    if not all(item == pram_variable for item in pram_variables):
-        logger.warning("Different variables in graph")
-
-    return pram_variable
 
 

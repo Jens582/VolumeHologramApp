@@ -2,12 +2,15 @@
 from threading import Event, Lock, Thread
 from queue import Queue
 import numpy as np
+import logging
+import logging.handlers
+import queue
+from logging import Logger
 
 from source.parameter_controller import ParameterControl
 from source.hoe_in_loop import HoeInLoop
 from source.data_container import DataContainer
 from source.store_controller import StoreController
-from source.hoe_logger import logger
 
 from rcwa.rcwa_exception import RCWAError
 
@@ -20,6 +23,9 @@ class AppController:
     def __init__(self):
         self.parameter_control: ParameterControl = ParameterControl()
         self.store_controller: StoreController = StoreController()
+
+        self.logger: Logger = logging.getLogger("Hologram_app_logger")
+        self.log_queue: Queue = Queue()
         
         self._stop_loop_event: Event = Event()  
         self._thread_loop: Thread  = None
@@ -34,6 +40,8 @@ class AppController:
         self._hoe_in_loop: HoeInLoop = None
         self._variables: np.ndarray = None
 
+        self._prepare_logger()
+
     def transfer_simulation_to_store(self, name):
         """
         Transfers the completed simulation data to the store controller.
@@ -46,13 +54,13 @@ class AppController:
         """
         with self._lock_data:
             if self._is_running:
-                logger.info("Can't transfer data, simulation is running")
+                self.logger.info("Can't transfer data, simulation is running")
                 return False
             if self._progress != 100:
-                logger.info("Can't transfer data, simulation is not completed")
+                self.logger.info("Can't transfer data, simulation is not completed")
                 return False
             if self._data is None:
-                logger.info("Can't transfer data, no simulation available")
+                self.logger.info("Can't transfer data, no simulation available")
                 return False
             self._data.name = name    
             self._data.color = "red"       
@@ -91,7 +99,7 @@ class AppController:
             tuple: (is_running, progress, plot_data) or None if locked.
         """
         if self._lock_data.locked():
-            logger.debug("Data are locked")
+            self.logger.debug("Data are locked")
             return None
         
         with self._lock_data:
@@ -101,7 +109,7 @@ class AppController:
             if ask_for_plot_data or self._new_data or store_new:
                 if self._data is None:
                     plot_data = list()
-                else:
+                else:                    
                     plot_data = self._data.get_plot_data(rs,rp, ts, tp, es, ep, hx, hy)
                 store_plots = self.store_controller.get_plot_data(rs,rp, ts, tp, es, ep, hx, hy)
                 plot_data = plot_data + store_plots
@@ -109,14 +117,13 @@ class AppController:
             self.store_controller.new_data = False
             return (self._is_running, self._progress, plot_data)
         
-
     def start_stop_calculation(self):
         """
         Starts or stops the simulation process. 
         """
         if self._thread_loop is not None and self._thread_loop.is_alive():
             self._stop_loop_event.set()
-            logger.info("Simulation will be stopped")
+            self.logger.info("Simulation will be stopped")
             return False
         self._thread_loop = None
         self._prepare_calculation()
@@ -125,7 +132,7 @@ class AppController:
         """
         Prepare and starts a new simulation loop.
         """
-        logger.info("Prepare simulation")   
+        self.logger.info("Prepare simulation")   
         
         with self._lock_data:            
             try:                
@@ -141,25 +148,24 @@ class AppController:
                 self._hoe_in_loop = None
                 self._data = None
                 self._new_data = True
-                logger.warning("Simulation preparation failed")
+                self.logger.warning("Simulation preparation failed")
                 if isinstance(e, RCWAError):
-                    logger.warning(e.message+"\n"+e.info+"\n")
+                    self.logger.warning(e.message+"\n"+e.info+"\n")
                 else:
-                    logger.error(f"Error: {type(e).__name__} - {e}")
-                    logger.error("Traceback:", exc_info=True)                
+                    self.logger.error(f"Error: {type(e).__name__} - {e}")
+                    self.logger.error("Traceback:", exc_info=True)                
                 return 
 
         self._thread_loop = Thread(target=self._simulation_loop, daemon=True)
         self._thread_loop.start()
-
-        
+      
     def _simulation_loop(self):
         """
         Runs the main simulation loop, iterating over all variable values and computing the results.
         """
         variable = self._variables
         dim = len(variable)
-        logger.info("Start simulation")  
+        self.logger.info("Start simulation")  
         for i in range(dim):
             if self._stop_loop_event.is_set():
                 transfer = dict()
@@ -168,7 +174,7 @@ class AppController:
                 self._task_queue.put(transfer)
                 self._transfer_data_from_queue()
                 self._stop_loop_event.clear()
-                logger.info("Simulation stopped!")
+                self.logger.info("Simulation stopped!")
                 return
             else:   
                 v = variable[i]                         
@@ -186,7 +192,7 @@ class AppController:
                     self._task_queue.put(transfer) 
                 except Exception as e:                    
                     message = e.args[0]
-                    logger.warning(f"Simulation value {v} can not be calculated. Exception type {type(e)}: "+ message)
+                    self.logger.warning(f"Simulation value {v} can not be calculated. Exception type {type(e)}: "+ message)
                    
 
         transfer = dict()
@@ -196,8 +202,18 @@ class AppController:
         self._task_queue.put(transfer)
         with self._lock_data:
             self._transfer_data_from_queue()
-        logger.info("Simulation finished!")
+        self.logger.info("Simulation finished!")
 
+    def _prepare_logger(self):
+        log_queue = self.log_queue
+        logger = self.logger
+        logger.setLevel(logging.INFO)
 
+        queue_handler = logging.handlers.QueueHandler(log_queue)
+        logger.addHandler(queue_handler)
+
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        for handler in logger.handlers:
+            handler.setFormatter(formatter)
 
 

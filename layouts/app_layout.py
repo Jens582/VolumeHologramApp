@@ -6,7 +6,10 @@ from layouts.display_layout import layout_display
 from layouts.controller_layout import layout_controller
 from layouts.logger_layout import layout_logger
 
+
+id_initial = "app_initial"
 id_interval = "app_update_interval"
+id_id_store ="app_id_store"
 id_dummy_store ="app_dummy_store"
 
 
@@ -33,8 +36,10 @@ layout_app = html.Div(
                     layout_store,
                     _middle_panel,
                     layout_parameter,
+                    dcc.Interval(id=id_initial, interval=1000, max_intervals=1, n_intervals=0),
                     dcc.Interval(id=id_interval, interval=1000, n_intervals=0),
-                    dcc.Store(id=id_dummy_store)
+                    dcc.Store(id=id_id_store), 
+                    dcc.Store(id=id_dummy_store), 
                 ]
             )
 
