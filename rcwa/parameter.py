@@ -33,23 +33,27 @@ class Parameter:
         return 2*np.pi/self.lam
     
     @property
+    def n_ref(self) -> float:
+        return np.sqrt(self.er_ref*self.ur_ref)
+    
+    @property
     def kx_inc(self) -> float:
         theta = np.deg2rad(self.theta_deg)
         phi = np.deg2rad(self.phi_deg)
-        kx = self.k0*np.sin(theta)*np.cos(phi)
+        kx = self.k0*self.n_ref*np.sin(theta)*np.cos(phi)        
         return kx
     
     @property
     def ky_inc(self) -> float:
         theta = np.deg2rad(self.theta_deg)
         phi = np.deg2rad(self.phi_deg)
-        ky = self.k0*np.sin(theta)*np.sin(phi)
+        ky = self.k0*self.n_ref*np.sin(theta)*np.sin(phi)
         return ky
     
     @property
     def kz_inc(self) -> float:
         theta = np.deg2rad(self.theta_deg)
-        kz = self.k0*np.cos(theta)
+        kz = self.k0*self.n_ref*np.cos(theta)
         return kz
     
     @property
