@@ -147,3 +147,42 @@ The **upper part** of the store section contains buttons to:
 
 ⚠️ **Warning:** **Deleting a simulation** will **permanently remove all selected simulations**.  
 
+# Volume Hologram Evaluation - c++ (Beta-Version)
+For extensive evaluations, a **C++ console implementation** is also available, allowing input parameters to be provided via a text file. The program is provided as a **CMake project**, which must be compiled by the user. The project requires [Armadillo](https://arma.sourceforge.net/) to be included.
+
+To execute the program, a text file named **hoeInputvalues.dat** with input parameters must be placed in the same folder as the executable. A demo file is provided.
+
+
+
+## Struct of input file
+The input file must follow this structure:  
+Each row represents a simulation with the following input parameters:
+
+1. **thetaDeg** – Polar angle of the incident beam
+2. **phiDeg** – Azimuthal angle of the incident beam
+3. **lam** – Wavelength of the incident beam
+4. **lamHoe** – Wavelength of the recording beams
+5. **thetaDegRec1** – Polar angle of recording beam 1
+6. **phiDegRec1** – Azimuthal angle of recording beam 1
+7. **thetaDegRec2** – Polar angle of recording beam 2
+8. **phiDegRec2** – Azimuthal angle of recording beam 2
+9. **thickness** – Thickness of the hologram
+10. **n** – Average refractive index
+11. **dn** – Modulation depth of the refractive index
+12. **dimZ** – Number of layers in the z-direction
+13. **stepsPerCycle** – Enable cycle mode for thickness calculations
+14. **addArLayer** – Add an anti-reflection layer on both sides of the hologram
+
+
+## Usage 
+After starting, the user will be asked to define the saving interval and the harmonic order.
+
+- The **saving interval** defines how often simulation results are stored.
+- The **harmonic** order *h* is fixed for the evaluation.
+
+## Results 
+Results are stored in **hoeEvaluation.dat** in the following format:
+
+Each row corresponds to a row in the input file and contains the computed results:
+
+- **Rs, Rp, Ts, Tp** for harmonic orders from *-h* to *h*, where *h* is the input harmonic order.
